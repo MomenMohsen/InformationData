@@ -1,13 +1,11 @@
 ﻿using System;
-
 class Program
 {
     static void Main()
     {
-
-        string name, job, married;
+        string name, job, married, worhname = "";
         int birthyear, birthmonth, birthday, birthyeardate, birthmonthdate, birthdaydate;
-        float Height, hieghtinfeet;
+        float Height, hieghtinfeet, weight, weightlbs;
         while (true)
         {
             Console.WriteLine("Please Enter your Name :");
@@ -68,15 +66,38 @@ class Program
         }
         while (true)
         {
+            Console.WriteLine("please Enter Your Weight in KG");
+            if (float.TryParse(Console.ReadLine(), out weight))
+            {
+                break;
+            }
+            Console.WriteLine("** Weight Cannot Be Empty Or String **");
+        }
+        while (true)
+        {
             Console.WriteLine("Are You Married (y-yes n-no)");
             married = Console.ReadLine();
             if (!string.IsNullOrWhiteSpace(married))
             {
                 break;
             }
-            Console.WriteLine("** Married Cannot Be Empty **");
+            else
+            {
+                Console.WriteLine("** Married Cannot Be Empty **");
+            }
         }
+        while (married == "y" || married == "yes")
+        {
+            Console.WriteLine("Enter Your Wife/Husband name");
+            worhname = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(worhname))
+            {
+                break;
+            }
+            Console.WriteLine("** Wife/Husband Cannot Be Empty **");
 
+
+        }
 
         birthyeardate = (DateTime.Now.Year - birthyear);
         birthmonthdate = (DateTime.Now.Month - birthmonth);
@@ -93,13 +114,23 @@ class Program
             birthyeardate = (birthyeardate - 1);
         }
         hieghtinfeet = (Height / (float)30.48f);
+        weightlbs = (weight * (float)2.20462262185f);
 
         Console.WriteLine("\n************** Your Information Is *************");
         Console.WriteLine("Name : {0}", name);
         Console.WriteLine("Age : {0}\\{1}\\{2}", birthyeardate, birthmonthdate, birthdaydate);
         Console.WriteLine("Height : {0} CM \\ {1} FT ", Height, hieghtinfeet);
+        Console.WriteLine("Weight : {0} KG \\ {1} LB", weight, weightlbs);
         Console.WriteLine("Job : {0}", job);
-        Console.WriteLine("Married : {0}", married == "y" ? "yes" : "no");
+        if (married == "y" || married == "yes")
+        {
+            Console.WriteLine("Married : Yes {0}", worhname);
+        }
+        else
+        {
+            Console.WriteLine("Married : No ");
+        }
+
         Console.WriteLine("*************************************************");
 
         Console.ReadKey(true);
