@@ -3,136 +3,95 @@ class Program
 {
     static void Main()
     {
-        string name, job, married, worhname = "";
-        int birthyear, birthmonth, birthday, birthyeardate, birthmonthdate, birthdaydate;
-        float Height, hieghtinfeet, weight, weightlbs;
-        while (true)
-        {
-            Console.WriteLine("Please Enter your Name :");
-            name = Console.ReadLine();
-            if (!string.IsNullOrWhiteSpace(name))
-            {
-                break;
-            }
-            Console.WriteLine("** Name Cannot Be Empty **");
-        }
+        string name, job, married, spouseName = "";
+        int birthYear, birthMonth, birthDay;
+        float height, heightInFeet, weight, weightLbs;
 
-        while (true)
-        {
-            Console.WriteLine("please Enter Your BirthYear :");
-            if (int.TryParse(Console.ReadLine(), out birthyear))
-            {
-                break;
-            }
-            Console.WriteLine("** BirthYear Cannot Be Empty Or String **");
-        }
-
-        while (true)
-        {
-            Console.WriteLine("please Enter Your BirthMonth :");
-            if (int.TryParse(Console.ReadLine(), out birthmonth))
-            {
-                break;
-            }
-            Console.WriteLine("** BirthMonth Cannot Be Empty Or String **");
-        }
-        while (true)
-        {
-            Console.WriteLine("please Enter Your Birth Day :");
-            if (int.TryParse(Console.ReadLine(), out birthday))
-            {
-                break;
-            }
-            Console.WriteLine("** BirthDay Cannot Be Empty Or String **");
-        }
-        while (true)
-        {
-            Console.WriteLine("please Enter Your Job :");
-            job = Console.ReadLine();
-            if (!string.IsNullOrWhiteSpace(job))
-            {
-                break;
-            }
-            Console.WriteLine("** Job Cannot Be Empty **");
-        }
-        while (true)
-        {
-            Console.WriteLine("please Enter Your Hieght in CM");
-            if (float.TryParse(Console.ReadLine(), out Height))
-            {
-                break;
-            }
-            Console.WriteLine("** Hieght Cannot Be Empty Or String **");
-        }
-        while (true)
-        {
-            Console.WriteLine("please Enter Your Weight in KG");
-            if (float.TryParse(Console.ReadLine(), out weight))
-            {
-                break;
-            }
-            Console.WriteLine("** Weight Cannot Be Empty Or String **");
-        }
-        while (true)
-        {
-            Console.WriteLine("Are You Married (y-yes n-no)");
-            married = Console.ReadLine();
-            if (!string.IsNullOrWhiteSpace(married))
-            {
-                break;
-            }
-            else
-            {
-                Console.WriteLine("** Married Cannot Be Empty **");
-            }
-        }
-        while (married == "y" || married == "yes")
-        {
-            Console.WriteLine("Enter Your Wife/Husband name");
-            worhname = Console.ReadLine();
-            if (!string.IsNullOrWhiteSpace(worhname))
-            {
-                break;
-            }
-            Console.WriteLine("** Wife/Husband Cannot Be Empty **");
-
-
-        }
-
-        birthyeardate = (DateTime.Now.Year - birthyear);
-        birthmonthdate = (DateTime.Now.Month - birthmonth);
-        birthdaydate = (DateTime.Now.Day - birthday);
-
-        if (birthdaydate < 0)
-        {
-            birthdaydate = (birthdaydate + 12);
-            birthmonthdate = (birthmonthdate - 1);
-        }
-        if (birthmonthdate < 0)
-        {
-            birthmonthdate = (birthmonthdate + 12);
-            birthyeardate = (birthyeardate - 1);
-        }
-        hieghtinfeet = (Height / (float)30.48f);
-        weightlbs = (weight * (float)2.20462262185f);
-
-        Console.WriteLine("\n************** Your Information Is *************");
-        Console.WriteLine("Name : {0}", name);
-        Console.WriteLine("Age : {0}\\{1}\\{2}", birthyeardate, birthmonthdate, birthdaydate);
-        Console.WriteLine("Height : {0} CM \\ {1} FT ", Height, hieghtinfeet);
-        Console.WriteLine("Weight : {0} KG \\ {1} LB", weight, weightlbs);
-        Console.WriteLine("Job : {0}", job);
+        name = ReadString("Please Enter your Name:");
+        birthYear = ReadInt("Please Enter Your Birth Year:");
+        birthMonth = ReadInt("Please Enter Your Birth Month (1-12):", 1, 12);
+        birthDay = ReadInt("Please Enter Your Birth Day (1-31):", 1, 31);
+        job = ReadString("Please Enter Your Job:");
+        height = ReadFloat("Please Enter Your Height in CM:");
+        weight = ReadFloat("Please Enter Your Weight in KG:");
+        married = ReadString("Are You Married? (y-yes, n-no):").ToLower();
         if (married == "y" || married == "yes")
         {
-            Console.WriteLine("Married : Yes {0}", worhname);
-        }
-        else
-        {
-            Console.WriteLine("Married : No ");
+            spouseName = ReadString("Enter Your Spouse Name:");
         }
 
-        Console.WriteLine("*************************************************");
+        // Calculate age using DateTime
+        DateTime birthDate = new DateTime(birthYear, birthMonth, birthDay);
+        DateTime today = DateTime.Today;
+        int ageYears = today.Year - birthDate.Year;
+        int ageMonths = today.Month - birthDate.Month;
+        int ageDays = today.Day - birthDate.Day;
+
+        if (ageDays < 0)
+        {
+            ageMonths--;
+            ageDays += DateTime.DaysInMonth(today.Year, today.Month - 1);
+        }
+        if (ageMonths < 0)
+        {
+            ageYears--;
+            ageMonths += 12;
+        }
+
+        // Convert height to feet and weight to pounds
+        heightInFeet = height / 30.48f;
+        weightLbs = weight * 2.20462262185f;
+
+
+        // Display information
+        Console.WriteLine("\n************** Your Information *************");
+        Console.WriteLine($"Name: {name}");
+        Console.WriteLine($"Age: {ageYears} Years, {ageMonths} Months, {ageDays} Days");
+        Console.WriteLine($"Height: {height} CM / {heightInFeet:F2} FT");
+        Console.WriteLine($"Weight: {weight} KG / {weightLbs:F2} LB");
+        Console.WriteLine($"Job: {job}");
+        Console.WriteLine($"Married: {(married == "y" || married == "yes" ? "Yes, " + spouseName : "No")}");
+        Console.WriteLine("*********************************************");
+
 
         Console.ReadKey(true);
     }
+    // Helper Methods
+    static string ReadString(string message)
+    {
+        string input;
+        while (true)
+        {
+            Console.WriteLine(message);
+            input = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(input))
+                return input;
+            Console.WriteLine("** Input Cannot Be Empty **");
+        }
+    }
+
+    static int ReadInt(string message, int min = int.MinValue, int max = int.MaxValue)
+    {
+        int value;
+        while (true)
+        {
+            Console.WriteLine(message);
+            if (int.TryParse(Console.ReadLine(), out value) && value >= min && value <= max)
+                return value;
+            Console.WriteLine($"** Enter a valid number between **");
+        }
+    }
+
+    static float ReadFloat(string message)
+    {
+        float value;
+        while (true)
+        {
+            Console.WriteLine(message);
+            if (float.TryParse(Console.ReadLine(), out value))
+                return value;
+            Console.WriteLine("** Input must be a valid number **");
+        }
+    }
+
 }
